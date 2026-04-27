@@ -1,0 +1,49 @@
+{
+    "name": "ncod3v/ai-sdk",
+    "description": "PHP SDK für die n0cl0n3.AI KI-Dienste — Code-Analyse, SQL-Generator, Übersetzung, Chat und mehr.",
+    "type": "library",
+    "keywords": [
+        "ai", "claude", "anthropic", "llm", "code-analysis",
+        "sql-generator", "translation", "nlp", "ki", "chatbot"
+    ],
+    "homepage": "https://ai.noclone.de",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Holger Mauch",
+            "email": "kontakt@noclone.de",
+            "homepage": "https://noclone.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ncod3v\\AI\\": "src/Ncod3v/AI/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ncod3v\\AI\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    }
+}
