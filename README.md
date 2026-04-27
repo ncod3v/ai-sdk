@@ -1,6 +1,6 @@
 # ncod3v/ai-sdk
 
-**PHP SDK für die n0cl0n3.AI KI-Dienste** — v1.1.0
+**PHP SDK für die n0cl0n3.AI KI-Dienste** — v1.2.0
 
 [![Packagist Version](https://img.shields.io/packagist/v/ncod3v/ai-sdk)](https://packagist.org/packages/ncod3v/ai-sdk)
 [![PHP Version](https://img.shields.io/packagist/php-v/ncod3v/ai-sdk)](https://packagist.org/packages/ncod3v/ai-sdk)
