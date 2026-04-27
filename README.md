@@ -1,12 +1,12 @@
 # ncod3v/ai-sdk
 
-**PHP SDK für die n0cl0n3.AI KI-Dienste**
+**PHP SDK für die n0cl0n3.AI KI-Dienste** — v1.1.0
 
 [![Packagist Version](https://img.shields.io/packagist/v/ncod3v/ai-sdk)](https://packagist.org/packages/ncod3v/ai-sdk)
 [![PHP Version](https://img.shields.io/packagist/php-v/ncod3v/ai-sdk)](https://packagist.org/packages/ncod3v/ai-sdk)
 [![License](https://img.shields.io/packagist/l/ncod3v/ai-sdk)](LICENSE)
 
-Einfacher Zugang zu 10 KI-Diensten — Code-Analyse, SQL-Generator, Übersetzung, DSGVO-Checker, Meeting-Protokoll, E-Mail-Triage und mehr.
+13 KI-Dienste: Code-Analyse, SQL, Übersetzung, DSGVO, Meeting, **Social Media Generator**, **Startup Kalkulator** und mehr.
 
 ## Installation
 
@@ -23,23 +23,30 @@ $ai = new Client('ncod3v_ihr_api_key');
 
 // Code analysieren
 $result = $ai->analyzeCode('<?php echo $_GET["id"]; ?>', 'php');
-echo $result['quality_score'];  // 0–100
-echo $result['summary'];
+echo $result['quality_score']; // 0–100
 
-// SQL generieren
-$sql = $ai->generateSQL('Alle Kunden aus Stuttgart sortiert nach Name', 'MySQL');
-echo $sql['query'];
+// Social Media für mehrere Plattformen
+$content = $ai->generateSocialContent(
+    topic:     'Unser KI-Tool spart 80% Entwicklungszeit',
+    platforms: ['instagram', 'linkedin', 'twitter'],
+    tone:      'professional',
+    industry:  'Tech'
+);
+echo $content['instagram']['post'];
+echo implode(' ', $content['instagram']['hashtags']);
 
-// Text übersetzen
-$trans = $ai->translate('Guten Morgen', 'Englisch');
-echo $trans['translation'];  // Good morning
-
-// Token-Verbrauch
-$meta = $ai->getLastMeta();
-echo $meta['tokens_total'] . ' Tokens · ' . $meta['duration_ms'] . 'ms';
+// Startup-Idee analysieren
+$analysis = $ai->analyzeStartup(
+    idea:          'KI-Buchhaltung für Freelancer',
+    industry:      'FinTech',
+    capital:       25000,
+    businessModel: 'saas'
+);
+echo $analysis['success_probability']['overall'] . '%'; // z.B. 73%
+echo $analysis['financial_projection']['break_even_months'] . ' Monate Break-Even';
 ```
 
-## Dienste & Methoden
+## Alle Methoden
 
 | Methode | Dienst | Plan |
 |---|---|---|
@@ -54,78 +61,83 @@ echo $meta['tokens_total'] . ' Tokens · ' . $meta['duration_ms'] . 'ms';
 | `triageEmail($email, $context)` | E-Mail-Triage | Pro+ |
 | `analyzeSEO($content, $keyword)` | SEO-Analyse | Pro+ |
 | `translate($text, $targetLang)` | Übersetzung | Starter+ |
+| `generateSocialContent($topic, $platforms, $tone)` | **Social Media** ✨ | Pro+ |
+| `analyzeStartup($idea, $industry, $capital)` | **Startup Kalkulator** ✨ | Pro+ |
 
-## Beispiele
+## Social Media Generator
 
-### Code-Analyse
 ```php
-$result = $ai->analyzeCode($phpCode, 'php');
-
-// Rückgabe
-$result['quality_score']  // int 0–100
-$result['summary']        // string Zusammenfassung
-$result['bugs']           // array gefundene Bugs
-$result['security']       // array Sicherheitsprobleme
-$result['improvements']   // array Verbesserungsvorschläge
-```
-
-### SQL-Generator
-```php
-$result = $ai->generateSQL(
-    description: 'Alle Bestellungen der letzten 30 Tage mit Kundennamen',
-    dialect:     'MySQL',
-    schema:      'orders(id,customer_id,total,created_at), customers(id,name,email)',
-    mode:        'generate'  // generate|optimize|explain|fix
+$content = $ai->generateSocialContent(
+    topic:     'Launch unserer neuen App',
+    platforms: ['instagram', 'linkedin', 'twitter', 'tiktok'],
+    tone:      'viral',  // professional|casual|viral|educational|motivational
+    industry:  'Tech',
+    keywords:  ['KI', 'App', 'Launch'],
+    cta:       'Jetzt kostenlos testen',
+    language:  'Deutsch'
 );
 
-echo $result['query'];
-echo $result['explanation'];
+// Jede Plattform bekommt spezifischen Content:
+echo $content['instagram']['post'];
+echo $content['linkedin']['post'];
+echo $content['twitter']['tweet'];
+echo $content['tiktok']['script'];
+echo $content['tiktok']['hook'];
 ```
 
-### Multi-Turn Chat
+## Startup Kalkulator
+
 ```php
-$messages = [
-    ['role' => 'user',      'content' => 'Was ist ein JOIN in SQL?'],
-    ['role' => 'assistant', 'content' => 'Ein JOIN...'],
-    ['role' => 'user',      'content' => 'Kannst du ein Beispiel zeigen?'],
-];
+$analysis = $ai->analyzeStartup(
+    idea:          'Automatisierte Social-Media-Planung für KMU',
+    industry:      'SaaS',
+    targetGroup:   'KMU',
+    location:      'Deutschland',
+    capital:       50000,
+    founders:      2,
+    experience:    'hoch',  // gering|mittel|hoch|experte
+    businessModel: 'saas'
+);
 
-$result = $ai->chat($messages, persona: 'SQL-Experte');
-echo $result['result'];
+echo $analysis['success_probability']['overall'] . '%';
+echo $analysis['financial_projection']['startup_costs']['einmalig'];
+echo $analysis['financial_projection']['break_even_months'];
+echo $analysis['verdict'];  // EMPFOHLEN|BEDINGT_EMPFOHLEN|NICHT_EMPFOHLEN
+
+foreach ($analysis['risks'] as $risk) {
+    echo "{$risk['risk']} → {$risk['mitigation']}\n";
+}
 ```
 
-### Fehlerbehandlung
+## Fehlerbehandlung
+
 ```php
 use Ncod3v\AI\Exception\AuthException;
 use Ncod3v\AI\Exception\RateLimitException;
 use Ncod3v\AI\Exception\ApiException;
 
 try {
-    $result = $ai->analyzeCode($code);
-} catch (AuthException $e) {
-    // Ungültiger API-Key
-    echo 'Auth-Fehler: ' . $e->getMessage();
-} catch (RateLimitException $e) {
-    // Demo-Limit oder Plan-Limit erreicht
-    echo 'Rate-Limit: ' . $e->getMessage();
-} catch (ApiException $e) {
-    // Sonstiger API-Fehler
-    echo 'API-Fehler: ' . $e->getMessage();
-}
+    $result = $ai->generateSocialContent('Mein Thema', ['instagram']);
+} catch (AuthException $e)    { /* Ungültiger Key */ }
+  catch (RateLimitException $e) { /* Limit erreicht */ }
+  catch (ApiException $e)     { /* Sonstiger Fehler */ }
 ```
 
-## API-Key erhalten
+## Changelog
 
-API-Keys unter **[ai.noclone.de/portal](https://ai.noclone.de/portal/)** erstellen.
+### v1.1.0 (2026-04-28)
+- ✨ `generateSocialContent()` — 7 Plattformen optimiert
+- ✨ `analyzeStartup()` — Erfolgswahrscheinlichkeit + Finanzplanung
 
-Demo ohne Key: 5 Anfragen/Dienst/Tag (kein Key nötig — einfach weglassen oder leer lassen).
+### v1.0.0 (2026-04-27)
+- 🎉 Initial Release, 11 Dienste
 
 ## Links
 
-- **API-Dokumentation:** https://ai.noclone.de/dokumentation.php
-- **Preise & Pläne:** https://ai.noclone.de/preise.php
-- **Support:** kontakt@noclone.de
+- **Docs:** https://ai.noclone.de/dokumentation.php
+- **Portal:** https://ai.noclone.de/portal/
+- **Packagist:** https://packagist.org/packages/ncod3v/ai-sdk
 
 ## Lizenz
 
-MIT — siehe [LICENSE](LICENSE).
+MIT

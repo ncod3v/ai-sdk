@@ -1,10 +1,18 @@
 {
     "name": "ncod3v/ai-sdk",
-    "description": "PHP SDK für die n0cl0n3.AI KI-Dienste — Code-Analyse, SQL-Generator, Übersetzung, Chat und mehr.",
+    "description": "PHP SDK f\u00fcr die n0cl0n3.AI KI-Dienste \u2014 Code-Analyse, SQL-Generator, \u00dcbersetzung, Chat und mehr.",
     "type": "library",
     "keywords": [
-        "ai", "claude", "anthropic", "llm", "code-analysis",
-        "sql-generator", "translation", "nlp", "ki", "chatbot"
+        "ai",
+        "claude",
+        "anthropic",
+        "llm",
+        "code-analysis",
+        "sql-generator",
+        "translation",
+        "nlp",
+        "ki",
+        "chatbot"
     ],
     "homepage": "https://ai.noclone.de",
     "license": "MIT",
@@ -43,7 +51,8 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-main": "1.0-dev"
+            "dev-main": "1.1-dev"
         }
-    }
+    },
+    "version": "1.1.0"
 }

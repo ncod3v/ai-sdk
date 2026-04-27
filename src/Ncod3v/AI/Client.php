@@ -14,14 +14,14 @@ use Ncod3v\AI\Exception\AuthException;
  * Einfacher Zugang zu allen KI-Diensten der n0cl0n3.AI API.
  *
  * @package  ncod3v/ai-sdk
- * @version  1.0.0
+ * @version  1.1.0
  * @author   Holger Mauch <kontakt@noclone.de>
  * @license  MIT
  * @link     https://ai.noclone.de/dokumentation.php
  */
 class Client
 {
-    public const VERSION       = '1.0.0';
+    public const VERSION       = '1.1.0';
     public const BASE_URL      = 'https://ai.noclone.de/api';
     public const DEFAULT_MODEL = 'claude-sonnet-4-5-20251022';
 
@@ -286,5 +286,48 @@ class Client
         // Parsed-Daten + Meta flach zurückgeben
         $result = $data['parsed'] ?? ['result' => $data['result'] ?? $data];
         return array_merge($result, $this->lastMeta);
+    }
+
+    // =========================================================
+    // ── Neue Dienste v4.1 ────────────────────────────────────
+    // =========================================================
+
+    /**
+     * Social Media Content Generator (Pro+)
+     *
+     * @param  array   $platforms  ['instagram','linkedin','tiktok',...]
+     * @param  string  $tone       professional|casual|viral|educational|motivational
+     */
+    public function generateSocialContent(
+        string $topic,
+        array  $platforms   = ['instagram','linkedin'],
+        string $tone        = 'professional',
+        string $industry    = '',
+        array  $keywords    = [],
+        string $cta         = '',
+        string $language    = 'Deutsch'
+    ): array {
+        return $this->post('social.php', compact(
+            'topic','platforms','tone','industry','keywords','cta','language'
+        ));
+    }
+
+    /**
+     * Startup Kalkulation & Chancen-Analyse (Pro+)
+     * Erfolgswahrscheinlichkeit, Finanzprojektion, Marktanalyse und KI-Optimierungen.
+     */
+    public function analyzeStartup(
+        string $idea,
+        string $industry      = '',
+        string $targetGroup   = '',
+        string $location      = 'Deutschland',
+        float  $capital       = 0,
+        int    $founders      = 1,
+        string $experience    = 'mittel',
+        string $businessModel = 'B2B'
+    ): array {
+        return $this->post('startup.php', compact(
+            'idea','industry','targetGroup','location','capital','founders','experience','businessModel'
+        ));
     }
 }
